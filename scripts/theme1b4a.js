@@ -1,80 +1,72 @@
 var url = window.location.href;
 var pos = url.search("p=[1-6]");
-var xml, xml2, sf, oc, btn, btn2;
+var dom = [], oc, btn, btn2;
 if (pos != -1) p = url.charAt(pos+2); else p = "1";
 pos = url.search("w=[1-9]");
 if (pos != -1) w = url.charAt(pos+2); else w = "1";
 
 $(function(){
-	$.ajax({
-	type      : "GET",
-	url       : "data/website.xml",
-	dataType  : "xml",
-	beforeSend: function(){
-	    oc = $(".card-body").html();
-	},
-	success   : function(xmlData){
-		xml=xmlData;
-		var title = $("title",xml).text();
-		pos=title.lastIndexOf("> ");
-		if (pos != -1) title=title.substring(pos+2);
-		pos=title.lastIndexOf(" <");
-		if (pos != -1) title=title.substring(0,pos);
-		$("title").text(title);
-		title = $("title",xml).text();
-		$(".navbar-brand").html(title);
-		$("#title").find("center").html(title);
-		var stl = $("style",xml).text();
-		$("style").append(stl);
-		var pn = "", pn2 = "";
-		$("name:not(:empty)",xml).each(function(i,v){
-		   pn += "<li class='nav-item'><a class='nav-link' href='javascript:render(" + (i+1) + ",1);'>"
-		   + $(v).text() + "</a></li>";
-		   pn2 += "<a href='javascript:render(" + (i+1) + ",1);' class='btn btn-outline-primary'>"
-		   + $(v).text() + "</a>";
-		});
-		$(".navbar-nav").html(pn);
-		$(".btn-group-vertical").prepend(pn2);
-	},
-	error     : function(){
-		alert("Could not retrieve XML file.");
-	},
-	complete  : function(){
-		loadAnotherFile();
-	}
-	 });
+	oc = $(".card-body").html();
+	loadFile("data/website.xml",ml_display);
 });
 
-function loadAnotherFile() {
+function loadFile(url,cFunction) {
 	$.ajax({
 	type      : "GET",
-	url       : "data/website2.xml",
+	url       : url,
 	dataType  : "xml",
 	success   : function(xmlData){
-		xml2=xmlData;
-		var title = $("title",xml2).text();
-		$(".dropdown-toggle").prepend(title);
-		var pn = "";
-		$("name:not(:empty)",xml2).each(function(i,v){
-		   pn += "<li><a class='dropdown-item' href='javascript:render(" + (i+1) + ",2);'>" 
-		   + $(v).text() + "</a></li>";
-		});
-		$(".dropdown-menu").html(pn);
+		dom.push(xmlData);
 	},
 	error     : function(){
 		alert("Could not retrieve XML file.");
 	},
 	complete  : function(){
-	    btn = $(".navbar-nav").html();
-		btn2 = $(".btn-group-vertical").html();
-		render(p,w);
+		cFunction();
 	}
 	 });
 }
 
+function ml_display() {
+	var title = $("title",dom[0]).text();
+	pos=title.lastIndexOf("> ");
+	if (pos != -1) title=title.substring(pos+2);
+	pos=title.lastIndexOf(" <");
+	if (pos != -1) title=title.substring(0,pos);
+	$("title").text(title);
+	title = $("title",dom[0]).text();
+	$(".navbar-brand").html(title);
+	$("#title").find("center").html(title);
+	var stl = $("style",dom[0]).text();
+	$("style").append(stl);
+	var pn = "", pn2 = "";
+	$("name:not(:empty)",dom[0]).each(function(i,v){
+	   pn += "<li class='nav-item'><a class='nav-link' href='javascript:render(" + (i+1) + ",1);'>"
+	   + $(v).text() + "</a></li>";
+	   pn2 += "<a href='javascript:render(" + (i+1) + ",1);' class='btn btn-outline-primary'>"
+	   + $(v).text() + "</a>";
+	});
+	$(".navbar-nav").html(pn);
+	$(".btn-group-vertical").prepend(pn2);
+	loadFile("data/website2.xml",dd_display);
+}
+
+function dd_display() {
+	var title = $("title",dom[1]).text();
+	$(".dropdown-toggle").prepend(title);
+	var pn = "";
+	$("name:not(:empty)",dom[1]).each(function(i,v){
+	   pn += "<li><a class='dropdown-item' href='javascript:render(" + (i+1) + ",2);'>" 
+	   + $(v).text() + "</a></li>";
+	});
+	$(".dropdown-menu").html(pn);
+	btn = $(".navbar-nav").html();
+	btn2 = $(".btn-group-vertical").html();
+	render(p,w);
+}
+
 function render(pn, ws) {
-    if (ws!=1) sf=xml2; else sf=xml;
-    var cp = $("page:eq("+(pn-1)+")",sf);
+    var cp = $("page:eq("+(pn-1)+")",dom[ws-1]);
 	img=cp.find("image").text();
 	cnt=cp.find("contents").text();
     while (cnt.includes('"?p=')) {
