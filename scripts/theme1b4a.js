@@ -77,7 +77,7 @@ function render(pn, ws) {
 	   cnt=cnt.replace('"?p=5','"javascript:render(5,'+ws+');');
 	   cnt=cnt.replace('"?p=6','"javascript:render(6,'+ws+');');
     }
-	$(".card-img-top").attr("src",img);
+	if (img) $(".card").prepend("<img class="card-img-top" src="+img+">");
 	if (cp.attr("type")=="comments")
 	   cnt = '<div id="HCB_comment_box" style="background-color: transparent;">' +
 	   '<a href="https://www.htmlcommentbox.com">HTML Comment Box</a> is loading comments...</div>' +
