@@ -6,7 +6,7 @@ pos = url.search("w=[1-9]");
 if (pos != -1) w = url.charAt(pos+2); else w = "1";
 
 $(function(){
-	oc = $(".card-body").html();
+	oc = $(".card").html();
 	loadFile("data/website.xml",ml_display);
 });
 
@@ -85,7 +85,7 @@ function render(pn, ws) {
 	   '\u003cscript type="text/javascript" language="javascript" id="hcb">' +
 	   'if(!window.hcb_user){hcb_user={  };} (function(){s=document.createElement("script");s.setAttribute("type","text/javascript");s.setAttribute("src", "https://www.htmlcommentbox.com/jread?page="+escape((window.hcb_user && hcb_user.PAGE)||(""+window.location)).replace("+","%2B")+"&opts=470&num=10");' +
 	   'if (typeof s!="undefined") document.getElementsByTagName("head")[0].appendChild(s);})();\u003c/script>';
-	$(".card-body").html(oc);
+	$(".card").html(oc);
 	if (cp.attr("type")=="form") $(".form-horizontal").show();
 	$(".card-body").prepend(cnt);
 	$(".navbar-nav").html(btn);
