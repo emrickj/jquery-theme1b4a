@@ -69,7 +69,7 @@ function render(pn, ws) {
     var cp = $("page:eq("+(pn-1)+")",dom[ws-1]);
 	img=cp.find("image").text();
 	cnt=cp.find("contents").text();
-    while (cnt.indexOf('"?p=')) {
+    while (cnt.indexOf('"?p=')!=-1) {
 	   cnt=cnt.replace('"?p=1','"javascript:render(1,'+ws+');');
 	   cnt=cnt.replace('"?p=2','"javascript:render(2,'+ws+');');
 	   cnt=cnt.replace('"?p=3','"javascript:render(3,'+ws+');');
