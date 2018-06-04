@@ -77,7 +77,6 @@ function render(pn, ws) {
 	   cnt=cnt.replace('"?p=5','"javascript:render(5,'+ws+');');
 	   cnt=cnt.replace('"?p=6','"javascript:render(6,'+ws+');');
     }
-	if (img) $(".card").prepend("<img class='card-img-top' src="+img+">");
 	if (cp.attr("type")=="comments")
 	   cnt = '<div id="HCB_comment_box" style="background-color: transparent;">' +
 	   '<a href="https://www.htmlcommentbox.com">HTML Comment Box</a> is loading comments...</div>' +
@@ -86,6 +85,7 @@ function render(pn, ws) {
 	   'if(!window.hcb_user){hcb_user={  };} (function(){s=document.createElement("script");s.setAttribute("type","text/javascript");s.setAttribute("src", "https://www.htmlcommentbox.com/jread?page="+escape((window.hcb_user && hcb_user.PAGE)||(""+window.location)).replace("+","%2B")+"&opts=470&num=10");' +
 	   'if (typeof s!="undefined") document.getElementsByTagName("head")[0].appendChild(s);})();\u003c/script>';
 	$(".card").html(oc);
+	if (img) $(".card").prepend("<img class='card-img-top' src="+img+">");
 	if (cp.attr("type")=="form") $(".form-horizontal").show();
 	$(".card-body").prepend(cnt);
 	$(".navbar-nav").html(btn);
