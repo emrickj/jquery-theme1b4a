@@ -6,7 +6,7 @@ pos = url.search("w=[1-9]");
 if (pos != -1) w = url.charAt(pos+2); else w = "1";
 
 $(function(){
-	oc = $(".card-body").html();
+	oc = $(".card").html();
 	loadFile("data/website.xml",ml_display);
 });
 
@@ -69,7 +69,7 @@ function render(pn, ws) {
     var cp = $("page:eq("+(pn-1)+")",dom[ws-1]);
 	img=cp.find("image").text();
 	cnt=cp.find("contents").text();
-    while (cnt.includes('"?p=')) {
+    while (cnt.indexOf('"?p=')!=-1) {
 	   cnt=cnt.replace('"?p=1','"javascript:render(1,'+ws+');');
 	   cnt=cnt.replace('"?p=2','"javascript:render(2,'+ws+');');
 	   cnt=cnt.replace('"?p=3','"javascript:render(3,'+ws+');');
@@ -77,7 +77,6 @@ function render(pn, ws) {
 	   cnt=cnt.replace('"?p=5','"javascript:render(5,'+ws+');');
 	   cnt=cnt.replace('"?p=6','"javascript:render(6,'+ws+');');
     }
-	$(".card-img-top").attr("src",img);
 	if (cp.attr("type")=="comments")
 	   cnt = '<div id="HCB_comment_box" style="background-color: transparent;">' +
 	   '<a href="https://www.htmlcommentbox.com">HTML Comment Box</a> is loading comments...</div>' +
@@ -85,7 +84,8 @@ function render(pn, ws) {
 	   '\u003cscript type="text/javascript" language="javascript" id="hcb">' +
 	   'if(!window.hcb_user){hcb_user={  };} (function(){s=document.createElement("script");s.setAttribute("type","text/javascript");s.setAttribute("src", "https://www.htmlcommentbox.com/jread?page="+escape((window.hcb_user && hcb_user.PAGE)||(""+window.location)).replace("+","%2B")+"&opts=470&num=10");' +
 	   'if (typeof s!="undefined") document.getElementsByTagName("head")[0].appendChild(s);})();\u003c/script>';
-	$(".card-body").html(oc);
+	$(".card").html(oc);
+	if (img) $(".card").prepend("<img class='card-img-top' src="+img+">");
 	if (cp.attr("type")=="form") $(".form-horizontal").show();
 	$(".card-body").prepend(cnt);
 	$(".navbar-nav").html(btn);
